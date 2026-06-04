@@ -52,7 +52,7 @@ export interface PositionHeatmapData {
   providedIn: 'root'
 })
 export class PositionService {
-  private apiUrl = 'http://localhost:3000/api/positions';
+  private apiUrl = 'https://rno-back-websig.onrender.com/api/positions';
   
   // Behavior subjects for real-time updates
   private lastPositionsSubject = new BehaviorSubject<PositionWithDevice[]>([]);

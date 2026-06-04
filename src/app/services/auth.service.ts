@@ -36,7 +36,7 @@ export interface RegisterData {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/auth';
+  private apiUrl = 'https://rno-back-websig.onrender.com/api/auth';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
   private tokenExpirationTimer: any;

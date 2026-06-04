@@ -48,8 +48,8 @@ export interface DeviceStatistics {
   providedIn: 'root'
 })
 export class DeviceService {
-  private apiUrl = 'http://localhost:3000/api/devices';
-  private positionsUrl = 'http://localhost:3000/api/positions';
+  private apiUrl = 'https://rno-back-websig.onrender.com/api/devices';
+  private positionsUrl = 'https://rno-back-websig.onrender.com/api/positions';
   
   // Behavior subjects for real-time updates
   private devicesSubject = new BehaviorSubject<Device[]>([]);

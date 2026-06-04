@@ -64,7 +64,7 @@ export class SocketService implements OnDestroy {
       return;
     }
     
-    this.socket = io('http://localhost:3000', {
+    this.socket = io('https://rno-back-websig.onrender.com', {
       auth: { token },
       transports: ['websocket', 'polling'],
       reconnection: true,
