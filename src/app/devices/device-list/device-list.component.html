@@ -1,0 +1,323 @@
+<div class="device-list-container">
+    <!-- Header -->
+    <div class="page-header">
+        <div class="header-left">
+            <h2 class="page-title">
+                <a routerLink="/dashboard">
+                    <i class="bi bi-reply"></i>
+                </a>
+
+                Device Management
+            </h2>
+            <p class="page-subtitle">Manage and monitor all your connected devices</p>
+        </div>
+        <div class="header-right">
+            <button class="btn btn-primary" routerLink="/devices/register">
+                <i class="bi bi-plus-lg"></i> Register Device
+            </button>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon bg-primary bg-opacity-10">
+                <i class="bi bi-phone-fill text-primary"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ statistics.total }}</h3>
+                <p>Total Devices</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon bg-success bg-opacity-10">
+                <i class="bi bi-wifi text-success"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ statistics.online }}</h3>
+                <p>Online</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon bg-danger bg-opacity-10">
+                <i class="bi bi-wifi-off text-danger"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ statistics.offline }}</h3>
+                <p>Offline</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon bg-info bg-opacity-10">
+                <i class="bi bi-activity text-info"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ statistics.active }}</h3>
+                <p>Active (5min)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Bar -->
+    <div class="filters-bar">
+        <div class="search-box">
+            <i class="bi bi-search"></i>
+            <input type="text" class="form-control" placeholder="Search by name or UUID..." [(ngModel)]="searchTerm"
+                (input)="onSearchChange(searchTerm)" />
+        </div>
+
+        <div class="filter-group">
+            <button class="filter-btn" [class.active]="statusFilter === 'all'" (click)="onStatusFilterChange('all')">
+                All
+            </button>
+            <button class="filter-btn" [class.active]="statusFilter === 'online'"
+                (click)="onStatusFilterChange('online')">
+                <i class="bi bi-wifi"></i> Online
+            </button>
+            <button class="filter-btn" [class.active]="statusFilter === 'offline'"
+                (click)="onStatusFilterChange('offline')">
+                <i class="bi bi-wifi-off"></i> Offline
+            </button>
+        </div>
+
+        <div class="view-toggle">
+            <button class="toggle-btn" [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'">
+                <i class="bi bi-grid-3x3-gap-fill"></i>
+            </button>
+            <button class="toggle-btn" [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">
+                <i class="bi bi-list-ul"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Loading devices...</p>
+    </div>
+
+    <!-- Grid View -->
+    <div *ngIf="!isLoading && viewMode === 'grid'" class="devices-grid">
+        <div *ngFor="let device of filteredDevices" class="device-card">
+            <div class="card-header">
+                <div class="device-status-indicator" [class]="getStatusClass(device.status)">
+                    <i [class]="getStatusIcon(device.status)"></i>
+                </div>
+                <button class="card-menu" (click)="confirmDelete(device)">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
+            </div>
+
+            <div class="card-body">
+                <div class="device-icon">
+                    <i class="bi bi-phone"></i>
+                </div>
+                <h4 class="device-name">{{ device.device_name }}</h4>
+                <p class="device-uuid">
+                    <i class="bi bi-upc-scan"></i>
+                    {{ (device.device_uuid | slice:0:8) || '' }}...{{ (device.device_uuid | slice:-8) || '' }}
+                </p>
+
+                <div class="device-info-row">
+                    <div class="info-item">
+                        <i class="bi bi-clock"></i>
+                        <span>Registered: {{ device.created_at | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                    <div class="info-item" *ngIf="device.last_position">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>Last: {{ formatDate(device.last_position.timestamp) }}</span>
+                    </div>
+                </div>
+
+                <div class="device-location" *ngIf="device.last_position">
+                    <small>
+                        {{ device.last_position.latitude | number:'1.6-6' }},
+                        {{ device.last_position.longitude | number:'1.6-6' }}
+                    </small>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button class="btn btn-sm btn-outline-primary" (click)="trackDevice(device)">
+                    <i class="bi bi-map"></i> Track
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" (click)="viewDeviceDetails(device)">
+                    <i class="bi bi-info-circle"></i> Details
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete(device)">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- List View -->
+    <div *ngIf="!isLoading && viewMode === 'list'" class="table-responsive">
+        <table class="table devices-table">
+            <thead>
+                <tr>
+                    <th>Device</th>
+                    <th>UUID</th>
+                    <th>Status</th>
+                    <th>Last Location</th>
+                    <th>Last Update</th>
+                    <th>Registered</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let device of filteredDevices">
+                    <td class="device-cell">
+                        <div class="device-cell-content">
+                            <i class="bi bi-phone-fill"></i>
+                            <strong>{{ device.device_name }}</strong>
+                        </div>
+                    </td>
+                    <td>
+                        <code class="uuid-code">{{ (device.device_uuid | slice:0:12) || '' }}...</code>
+                    </td>
+                    <td>
+                        <span class="status-badge" [class]="getStatusClass(device.status)">
+                            <i [class]="getStatusIcon(device.status)"></i>
+                            {{ device.status }}
+                        </span>
+                    </td>
+                    <td>
+                        <span *ngIf="device.last_position">
+                            {{ device.last_position.latitude | number:'1.4-4' }},
+                            {{ device.last_position.longitude | number:'1.4-4' }}
+                        </span>
+                        <span *ngIf="!device.last_position" class="text-muted">No data</span>
+                    </td>
+                    <td>
+                        {{ formatDate(device.last_position?.timestamp) }}
+                    </td>
+                    <td>{{ device.created_at | date:'dd/MM/yyyy' }}</td>
+                    <td class="actions-cell">
+                        <button class="action-btn" (click)="trackDevice(device)" title="Track">
+                            <i class="bi bi-map"></i>
+                        </button>
+                        <button class="action-btn" (click)="viewDeviceDetails(device)" title="Details">
+                            <i class="bi bi-info-circle"></i>
+                        </button>
+                        <button class="action-btn danger" (click)="confirmDelete(device)" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && filteredDevices.length === 0" class="empty-state">
+        <i class="bi bi-phone-slash"></i>
+        <h4>No devices found</h4>
+        <p>Get started by registering your first device</p>
+        <button class="btn btn-primary" routerLink="/devices/register">
+            <i class="bi bi-plus-lg"></i> Register Device
+        </button>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="totalPages > 1" class="pagination-bar">
+        <button class="page-btn" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+
+        <div class="page-numbers">
+            <button *ngFor="let page of [].constructor(totalPages); let i = index" class="page-number"
+                [class.active]="currentPage === i + 1" (click)="changePage(i + 1)">
+                {{ i + 1 }}
+            </button>
+        </div>
+
+        <button class="page-btn" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Device Details Modal -->
+    <div class="modal-overlay" *ngIf="selectedDevice" (click)="closeDetails()">
+        <div class="modal-content device-details-modal" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h3>
+                    <i class="bi bi-phone-fill"></i>
+                    {{ selectedDevice.device_name }}
+                </h3>
+                <button class="close-btn" (click)="closeDetails()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="details-grid">
+                    <div class="detail-row">
+                        <label>Device UUID</label>
+                        <p class="uuid-text">{{ selectedDevice.device_uuid }}</p>
+                    </div>
+                    <div class="detail-row">
+                        <label>Status</label>
+                        <p>
+                            <span class="status-badge" [class]="getStatusClass(selectedDevice.status)">
+                                <i [class]="getStatusIcon(selectedDevice.status)"></i>
+                                {{ selectedDevice.status }}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="detail-row">
+                        <label>Registered On</label>
+                        <p>{{ selectedDevice.created_at | date:'fullDate' }} at {{ selectedDevice.created_at |
+                            date:'shortTime' }}</p>
+                    </div>
+                    <div class="detail-row" *ngIf="selectedDevice.last_position">
+                        <label>Last Known Location</label>
+                        <p>
+                            Latitude: {{ selectedDevice.last_position.latitude | number:'1.6-6' }}<br>
+                            Longitude: {{ selectedDevice.last_position.longitude | number:'1.6-6' }}
+                        </p>
+                    </div>
+                    <div class="detail-row" *ngIf="selectedDevice.last_position">
+                        <label>Last Update</label>
+                        <p>{{ selectedDevice.last_position.timestamp | date:'medium' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" (click)="trackDevice(selectedDevice)">
+                    <i class="bi bi-map"></i> Track on Map
+                </button>
+                <button class="btn btn-secondary" (click)="closeDetails()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" *ngIf="showDeleteModal" (click)="closeDeleteModal()">
+        <div class="modal-content delete-modal" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h3><i class="bi bi-exclamation-triangle-fill text-danger"></i> Confirm Delete</h3>
+                <button class="close-btn" (click)="closeDeleteModal()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete device <strong>{{ deviceToDelete?.device_name }}</strong>?</p>
+                <p class="text-muted">This action cannot be undone. All location history for this device will be
+                    permanently deleted.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" (click)="closeDeleteModal()">
+                    Cancel
+                </button>
+                <button class="btn btn-danger" (click)="deleteDevice()">
+                    <i class="bi bi-trash"></i> Delete Device
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

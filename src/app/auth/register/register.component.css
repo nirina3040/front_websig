@@ -1,0 +1,218 @@
+.bg-gradient-register {
+background: linear-gradient(135deg, #cfd7e2 0%, #8da5dd 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-gradient-register::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #27ae60;
+  box-shadow: 0 0 0 0.2rem rgba(39, 174, 96, 0.25);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #cfd7e2 0%, #8da5dd 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #cfd7e2 0%, #8da5dd 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+}
+
+.btn-primary:disabled {
+  transform: none;
+  opacity: 0.7;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+.progress {
+  border-radius: 10px;
+  background-color: #e9ecef;
+  overflow: hidden;
+}
+
+.progress-bar {
+  transition: width 0.3s ease;
+}
+
+.alert {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Custom checkbox styling */
+.form-check-input:checked {
+  background-color: #27ae60;
+  border-color: #27ae60;
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(39, 174, 96, 0.25);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .p-4 {
+    padding: 1.5rem !important;
+  }
+  
+  .display-1 {
+    font-size: 3rem;
+  }
+}
+
+/* Input group focus animation */
+.input-group:focus-within .input-group-text {
+  border-color: #27ae60;
+  color: #27ae60;
+  transform: scale(1.02);
+}
+
+/* Password strength indicator animation */
+.progress-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Loading spinner animation */
+.spinner-border {
+  vertical-align: middle;
+}
+
+/* Hover effects for social buttons */
+.btn-outline-secondary {
+  transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+  transform: translateX(5px);
+}
+
+/* Icon animations */
+.bi {
+  transition: transform 0.2s ease;
+}
+
+.btn:hover .bi {
+  transform: scale(1.1);
+}
+
+/* Form validation styling */
+.is-invalid ~ .invalid-feedback {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Password strength colors */
+.progress-bar.bg-danger {
+  background-color: #e74c3c !important;
+}
+
+.progress-bar.bg-warning {
+  background-color: #f39c12 !important;
+}
+
+.progress-bar.bg-info {
+  background-color: #3498db !important;
+}
+
+.progress-bar.bg-success {
+  background-color: #27ae60 !important;
+}
+
+/* Text colors for password strength */
+.text-danger {
+  color: #e74c3c !important;
+}
+
+.text-warning {
+  color: #f39c12 !important;
+}
+
+.text-info {
+  color: #3498db !important;
+}
+
+.text-success {
+  color: #27ae60 !important;
+}

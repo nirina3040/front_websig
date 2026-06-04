@@ -1,0 +1,334 @@
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center p-3 p-md-5">
+  <div class="row w-100 m-0">
+    <div class="col-lg-10 col-xl-8 mx-auto">
+      <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="row g-0">
+          <!-- Left side - Illustration -->
+          <div class="col-md-6 d-none d-md-block bg-gradient-register p-5 text-white">
+            <div class="h-100 d-flex flex-column justify-content-between">
+              <div>
+                <i class="bi bi-map-fill display-1 mb-4"></i>
+                <h2 class="fw-bold mb-3">Join WebSIG Platform</h2>
+                <p class="lead mb-4">Start tracking your devices in real-time</p>
+              </div>
+              
+              <div>
+                <div class="mb-3">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  <span>Real-time GPS tracking</span>
+                </div>
+                <div class="mb-3">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  <span>Interactive maps</span>
+                </div>
+                <div class="mb-3">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  <span>Secure & encrypted</span>
+                </div>
+                <div class="mb-3">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  <span>24/7 support</span>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <div class="d-flex gap-2 justify-content-center">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                </div>
+                <p class="small text-center mt-2">Trusted by 10,000+ users</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right side - Registration Form -->
+          <div class="col-md-6 bg-light">
+            <div class="p-4 p-lg-5">
+              <div class="text-center mb-4">
+                <div class="d-inline-block p-3 bg-primary bg-opacity-10 rounded-circle mb-3">
+                  <i class="bi bi-person-plus-fill fs-1 text-primary"></i>
+                </div>
+                <h2 class="fw-bold">Create Account</h2>
+                <p class="text-muted">Get started with your free account</p>
+              </div>
+
+              <!-- Error Alert -->
+              <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                {{ errorMessage }}
+                <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+              </div>
+
+              <!-- Registration Form -->
+              <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                <!-- Username Field -->
+                <div class="mb-3">
+                  <label for="username" class="form-label fw-semibold">
+                    <i class="bi bi-person-fill me-1"></i> Username
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0">
+                      <i class="bi bi-person text-muted"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control border-start-0 ps-0"
+                      id="username"
+                      formControlName="username"
+                      placeholder="johndoe_123"
+                      [class.is-invalid]="f['username'].invalid && f['username'].touched"
+                    />
+                  </div>
+                  <div class="invalid-feedback" *ngIf="f['username'].invalid && f['username'].touched">
+                    <i class="bi bi-info-circle me-1"></i>
+                    <span *ngIf="f['username'].errors?.['required']">Username is required</span>
+                    <span *ngIf="f['username'].errors?.['minlength']">Username must be at least 3 characters</span>
+                    <span *ngIf="f['username'].errors?.['maxlength']">Username cannot exceed 50 characters</span>
+                    <span *ngIf="f['username'].errors?.['pattern']">Username can only contain letters, numbers, and underscores</span>
+                  </div>
+                  <small class="text-muted">This will be your public display name</small>
+                </div>
+
+                <!-- Email Field -->
+                <div class="mb-3">
+                  <label for="email" class="form-label fw-semibold">
+                    <i class="bi bi-envelope-fill me-1"></i> Email Address
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0">
+                      <i class="bi bi-envelope text-muted"></i>
+                    </span>
+                    <input
+                      type="email"
+                      class="form-control border-start-0 ps-0"
+                      id="email"
+                      formControlName="email"
+                      placeholder="name@example.com"
+                      [class.is-invalid]="f['email'].invalid && f['email'].touched"
+                    />
+                  </div>
+                  <div class="invalid-feedback" *ngIf="f['email'].invalid && f['email'].touched">
+                    <i class="bi bi-info-circle me-1"></i>
+                    <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+                    <span *ngIf="f['email'].errors?.['email']">Please enter a valid email address</span>
+                    <span *ngIf="f['email'].errors?.['pattern']">Please enter a valid email address</span>
+                  </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="mb-3">
+                  <label for="password" class="form-label fw-semibold">
+                    <i class="bi bi-lock-fill me-1"></i> Password
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0">
+                      <i class="bi bi-key text-muted"></i>
+                    </span>
+                    <input
+                      [type]="showPassword ? 'text' : 'password'"
+                      class="form-control border-start-0 ps-0"
+                      id="password"
+                      formControlName="password"
+                      placeholder="Create a strong password"
+                      [class.is-invalid]="f['password'].invalid && f['password'].touched"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary border-start-0"
+                      (click)="togglePasswordVisibility()"
+                    >
+                      <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                    </button>
+                  </div>
+                  
+                  <!-- Password strength meter -->
+                  <div *ngIf="f['password'].value" class="mt-2">
+                    <div class="progress" style="height: 5px;">
+                      <div 
+                        class="progress-bar {{ passwordStrengthClass }}" 
+                        [style.width]="getPasswordStrengthWidth()"
+                        role="progressbar"
+                        [attr.aria-valuenow]="passwordStrength"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                    <small class="text-muted">
+                      Password strength: 
+                      <span [class.text-danger]="passwordStrengthText === 'Weak'"
+                            [class.text-warning]="passwordStrengthText === 'Fair'"
+                            [class.text-info]="passwordStrengthText === 'Good'"
+                            [class.text-success]="passwordStrengthText === 'Strong'">
+                        {{ passwordStrengthText }}
+                      </span>
+                    </small>
+                  </div>
+
+                  <div class="invalid-feedback" *ngIf="f['password'].invalid && f['password'].touched">
+                    <i class="bi bi-info-circle me-1"></i>
+                    <span *ngIf="f['password'].errors?.['required']">Password is required</span>
+                    <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 8 characters</span>
+                    <span *ngIf="f['password'].errors?.['weak']">Password is too weak</span>
+                  </div>
+                  <small class="text-muted">
+                    Use at least 8 characters with uppercase, lowercase, numbers, and symbols
+                  </small>
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div class="mb-3">
+                  <label for="confirmPassword" class="form-label fw-semibold">
+                    <i class="bi bi-shield-lock-fill me-1"></i> Confirm Password
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0">
+                      <i class="bi bi-check-circle text-muted"></i>
+                    </span>
+                    <input
+                      [type]="showConfirmPassword ? 'text' : 'password'"
+                      class="form-control border-start-0 ps-0"
+                      id="confirmPassword"
+                      formControlName="confirmPassword"
+                      placeholder="Confirm your password"
+                      [class.is-invalid]="f['confirmPassword'].invalid && f['confirmPassword'].touched"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary border-start-0"
+                      (click)="toggleConfirmPasswordVisibility()"
+                    >
+                      <i [class]="showConfirmPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                    </button>
+                  </div>
+                  <div class="invalid-feedback" *ngIf="f['confirmPassword'].invalid && f['confirmPassword'].touched">
+                    <i class="bi bi-info-circle me-1"></i>
+                    <span *ngIf="f['confirmPassword'].errors?.['required']">Please confirm your password</span>
+                    <span *ngIf="f['confirmPassword'].errors?.['mismatch']">Passwords do not match</span>
+                  </div>
+                </div>
+
+                <!-- Terms and Conditions -->
+                <div class="mb-4">
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="terms"
+                      formControlName="terms"
+                      [class.is-invalid]="f['terms'].invalid && f['terms'].touched"
+                    />
+                    <label class="form-check-label small" for="terms">
+                      I agree to the 
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a> 
+                      and 
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>
+                    </label>
+                  </div>
+                  <div class="invalid-feedback" *ngIf="f['terms'].invalid && f['terms'].touched">
+                    You must agree to the terms and conditions
+                  </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button
+                  type="submit"
+                  class="btn btn-primary w-100 py-2 fw-semibold"
+                  [disabled]="isLoading"
+                >
+                  <span *ngIf="!isLoading">
+                    <i class="bi bi-person-plus-fill me-2"></i> Create Account
+                  </span>
+                  <span *ngIf="isLoading">
+                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                    Creating account...
+                  </span>
+                </button>
+
+                <!-- Divider -->
+                <div class="position-relative my-4">
+                  <hr class="border-1" />
+                  <span class="position-absolute top-50 start-50 translate-middle bg-light px-3 text-muted small">
+                    OR
+                  </span>
+                </div>
+
+                <!-- Social Sign Up -->
+                <div class="d-grid gap-2">
+                  <button type="button" class="btn btn-outline-secondary">
+                    <i class="bi bi-google me-2"></i> Sign up with Google
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary">
+                    <i class="bi bi-github me-2"></i> Sign up with GitHub
+                  </button>
+                </div>
+              </form>
+
+              <!-- Login Link -->
+              <div class="text-center mt-4">
+                <p class="text-muted small mb-0">
+                  Already have an account?
+                  <a routerLink="/login" class="text-decoration-none fw-semibold">
+                    Sign in <i class="bi bi-arrow-right"></i>
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Terms Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-file-text-fill me-2"></i>Terms of Service
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <h6>1. Acceptance of Terms</h6>
+        <p>By registering for WebSIG Platform, you agree to comply with these terms...</p>
+        <h6>2. User Responsibilities</h6>
+        <p>You are responsible for maintaining the security of your account...</p>
+        <h6>3. Privacy</h6>
+        <p>We respect your privacy and handle your data according to our Privacy Policy...</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">I Understand</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy Modal -->
+<div class="modal fade" id="privacyModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-shield-check-fill me-2"></i>Privacy Policy
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <h6>Information We Collect</h6>
+        <p>We collect information you provide during registration including email and device data...</p>
+        <h6>How We Use Your Information</h6>
+        <p>Your location data is used only for providing real-time tracking services...</p>
+        <h6>Data Security</h6>
+        <p>We implement industry-standard security measures to protect your data...</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">I Understand</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,182 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="card-header">
+      <div class="header-icon">
+        <i class="bi bi-plus-circle-fill"></i>
+      </div>
+      <h2>Register New Device</h2>
+      <p>Add a new device to start tracking its location in real-time</p>
+    </div>
+
+    <!-- Success Message -->
+    <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      {{ successMessage }}
+      <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ errorMessage }}
+      <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+    </div>
+
+    <!-- Registration Form -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- Device Name -->
+      <div class="form-group">
+        <label for="deviceName">
+          <i class="bi bi-pencil-fill"></i>
+          Device Name <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="deviceName"
+          class="form-control"
+          formControlName="deviceName"
+          placeholder="e.g., iPhone 15, Samsung Galaxy, GPS Tracker"
+          [class.is-invalid]="f['deviceName'].invalid && f['deviceName'].touched"
+        />
+        <div class="invalid-feedback" *ngIf="f['deviceName'].invalid && f['deviceName'].touched">
+          <i class="bi bi-info-circle me-1"></i>
+          <span *ngIf="f['deviceName'].errors?.['required']">Device name is required</span>
+          <span *ngIf="f['deviceName'].errors?.['minlength']">Device name must be at least 3 characters</span>
+          <span *ngIf="f['deviceName'].errors?.['maxlength']">Device name cannot exceed 50 characters</span>
+          <span *ngIf="f['deviceName'].errors?.['pattern']">Device name can only contain letters, numbers, spaces, hyphens and underscores</span>
+        </div>
+        <small class="form-text text-muted">Give your device a meaningful name for easy identification</small>
+      </div>
+
+      <!-- Device Type -->
+      <div class="form-group">
+        <label>
+          <i class="bi bi-phone-fill"></i>
+          Device Type <span class="required">*</span>
+        </label>
+        <div class="device-types">
+          <label class="device-type-option" [class.selected]="f['deviceType'].value === 'mobile'">
+            <input type="radio" formControlName="deviceType" value="mobile" />
+            <i class="bi bi-phone"></i>
+            <span>Mobile Phone</span>
+          </label>
+          <label class="device-type-option" [class.selected]="f['deviceType'].value === 'tablet'">
+            <input type="radio" formControlName="deviceType" value="tablet" />
+            <i class="bi bi-tablet"></i>
+            <span>Tablet</span>
+          </label>
+          <label class="device-type-option" [class.selected]="f['deviceType'].value === 'tracker'">
+            <input type="radio" formControlName="deviceType" value="tracker" />
+            <i class="bi bi-geo-alt"></i>
+            <span>GPS Tracker</span>
+          </label>
+          <label class="device-type-option" [class.selected]="f['deviceType'].value === 'vehicle'">
+            <input type="radio" formControlName="deviceType" value="vehicle" />
+            <i class="bi bi-car-front"></i>
+            <span>Vehicle</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Device UUID -->
+      <div class="form-group">
+        <div class="uuid-header">
+          <label>
+            <i class="bi bi-upc-scan"></i>
+            Device UUID <span class="required">*</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="autoGenerateUuid" (change)="onAutoGenerateChange()" />
+            <span>Auto-generate</span>
+          </label>
+        </div>
+        
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="deviceUuid"
+            placeholder="Enter device UUID"
+            [class.is-invalid]="f['deviceUuid'].invalid && f['deviceUuid'].touched"
+            [readonly]="registerForm.get('autoGenerateUuid')?.value"
+          />
+          <button 
+            type="button" 
+            class="btn btn-outline-secondary" 
+            (click)="copyUuid()"
+            *ngIf="registerForm.get('autoGenerateUuid')?.value">
+            <i class="bi bi-clipboard"></i> Copy
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-outline-secondary" 
+            (click)="generateDeviceUuid()"
+            *ngIf="registerForm.get('autoGenerateUuid')?.value">
+            <i class="bi bi-arrow-repeat"></i> Generate
+          </button>
+        </div>
+        
+        <div class="invalid-feedback" *ngIf="f['deviceUuid'].invalid && f['deviceUuid'].touched">
+          <i class="bi bi-info-circle me-1"></i>
+          Device UUID is required
+        </div>
+        
+        <div class="uuid-info" *ngIf="showUuidInfo">
+          <i class="bi bi-check-circle-fill text-success"></i>
+          UUID copied to clipboard!
+        </div>
+        
+        <small class="form-text text-muted">
+          <i class="bi bi-info-circle"></i>
+          This unique identifier will be used to connect your mobile app. Keep it secure!
+        </small>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">
+          <i class="bi bi-file-text"></i>
+          Description (Optional)
+        </label>
+        <textarea
+          id="description"
+          class="form-control"
+          rows="3"
+          formControlName="description"
+          placeholder="Add any additional information about this device..."
+          [class.is-invalid]="f['description'].invalid && f['description'].touched"
+        ></textarea>
+        <div class="invalid-feedback" *ngIf="f['description'].invalid && f['description'].touched">
+          Description cannot exceed 200 characters
+        </div>
+      </div>
+
+      <!-- Installation Instructions -->
+      <div class="instructions-card" *ngIf="registerForm.get('autoGenerateUuid')?.value">
+        <h5><i class="bi bi-info-circle-fill"></i> Next Steps</h5>
+        <ol>
+          <li>Copy the generated UUID above</li>
+          <li>Open your mobile app and go to device setup</li>
+          <li>Paste this UUID into the app configuration</li>
+          <li>Start tracking your device in real-time!</li>
+        </ol>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" routerLink="/devices">
+          <i class="bi bi-x-lg"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+          <span *ngIf="!isLoading">
+            <i class="bi bi-check-lg"></i> Register Device
+          </span>
+          <span *ngIf="isLoading">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Registering...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

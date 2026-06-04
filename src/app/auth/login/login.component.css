@@ -1,0 +1,203 @@
+/* Background gradient - version neutre */
+.bg-gradient-primary {
+background: linear-gradient(135deg, #cfd7e2 0%, #8da5dd 100%);
+}
+
+/* Style pour que le texte soit bien visible */
+.bg-gradient-primary .text-white {
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.bg-gradient-primary .display-4,
+.bg-gradient-primary .lead,
+.bg-gradient-primary .small {
+  color: #ffffff;
+}
+
+.bg-gradient-primary i {
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.bg-gradient-primary .bi-map-fill {
+  color: #3498db;
+  text-shadow: none;
+}
+
+/* Card styles */
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Input group styles */
+.input-group-text {
+  background-color: #c9cccf;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+/* Primary button - bleu neutre */
+.btn-primary {
+ background: linear-gradient(135deg, #cfd7e2 0%, #8da5dd 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+ background: linear-gradient(135deg, #cfd7e2 0%, #8da5dd 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+.btn-primary:disabled {
+  transform: none;
+  opacity: 0.7;
+}
+
+/* Secondary button */
+.btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+/* Alert animation */
+.alert {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Checkbox styling */
+.form-check-input:checked {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card-body {
+    padding: 2rem !important;
+  }
+  
+  .display-4 {
+    font-size: 2rem;
+  }
+}
+
+/* Icon animations */
+.fs-1 {
+  transition: all 0.3s ease;
+}
+
+.fs-1:hover {
+  transform: scale(1.1);
+}
+
+/* Input group focus effect */
+.input-group:focus-within .input-group-text {
+  border-color: #3498db;
+  color: #3498db;
+}
+
+/* Loading spinner */
+.spinner-border {
+  vertical-align: middle;
+}
+
+/* Modal header */
+.modal-header.bg-primary {
+  background: #3498db !important;
+}
+
+.modal-header.bg-primary .btn-close-white {
+  filter: brightness(0) invert(1);
+}
+
+/* Lien forgot password */
+.text-decoration-none.small {
+  color: #3498db;
+}
+
+.text-decoration-none.small:hover {
+  color: #2980b9;
+  text-decoration: underline !important;
+}
+
+/* Sign up link */
+a.router-link-active, 
+a[routerLink="/register"] {
+  color: #3498db;
+}
+
+a.router-link-active:hover, 
+a[routerLink="/register"]:hover {
+  color: #2980b9;
+}
+
+/* Texte muted */
+.text-muted {
+  color: #7f8c8d !important;
+}
+
+/* Social buttons */
+.btn-outline-secondary {
+  border-color: #dee2e6;
+  color: #2c3e50;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #bdc3c7;
+  transform: translateX(5px);
+}
+
+.btn-outline-secondary i {
+  color: #3498db;
+}
+
+/* Amélioration de la lisibilité du texte sur le côté gauche */
+.bg-gradient-primary p,
+.bg-gradient-primary h1,
+.bg-gradient-primary .lead {
+  color: #ffffff;
+  opacity: 1;
+}
+
+.bg-gradient-primary .small {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Animation pour les cartes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeInUp 0.5s ease;
+}
